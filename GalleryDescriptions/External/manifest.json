@@ -1,0 +1,9 @@
+{
+    "name": "Gallery_Descriptions",
+    "version_number": "1.4.1",
+    "website_url": "",
+    "description": "Adds descriptions for characters, stages, Items and movesets"
+    ,"dependencies": [
+        "BepInEx-BepInExPack_NASB-5.4.16"
+    ]
+}
