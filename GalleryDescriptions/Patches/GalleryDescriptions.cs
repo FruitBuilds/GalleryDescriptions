@@ -8,37 +8,23 @@ using UnityEngine.UI;
 
 namespace GalleryDescriptions.Patches
 {
-    [HarmonyPatch(typeof(GalleryImage), "Activate")]
-    class GalleryImage_Activate
+    [HarmonyPatch(typeof(GalleryScreen), OnPressedGallerySlot)]
+static class GalleryScreen_OnPressedGallerySlot
+{
+    // needs to be named Postfix to tell Harmony to run it after the base game's method
+    static void Postfix(GallerySlot gallerySlot, SetSlotPortrait ___galleryPicture)
     {
-        static GameInstance gi;
-        static bool isCoroutineRunning;
-        // Token: 0x06001908 RID: 6408 RVA: 0x0006F434 File Offset: 0x0006D634
-        public Action<object> OnPressedGallerySlot(GallerySlot gallerySlot)
+        // need some method to look up an id string and return a sprite
+        // you also need some kind of manager to handle loading the new gallery images from disk or from embedded resources
+        // see: https://github.com/DeadlyKitten/CustomStockIcons/blob/master/CustomStockIcons/Managers/IconManager.cs
+        // to generate a Sprite from a texture you can use the following code, where `texture` is the texture you want to convert
+        // Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(texture.width / 2f, texture.height / 2f));
+        if (galleryManager.TryGetGallerySprite(gallerySlot.galleryPictureData.ID, out Sprite sprite))
         {
-            if (gallerySlot.galleryPictureData.Unlocked)
-            {
-                RectTransform component = this.mainContainer.GetComponent<RectTransform>();
-                if (component != null)
-                {
-                    component.anchoredPosition = Vector2.zero;
-                }
-                this.seeingPicture = true;
-                this.galleryPagesList[this.currentPageIndex].ToggleMenuInputFlow(fakse, false);
-                this.gallerybacground.SetActive(true);
-                this.galleryPicture.gameObject.SetActive(true);
-                this.galleryPictures.SetResourceTexture(galleryslot.galleryPictureData.PicturePath);
-                this.onPressedNo = this.onPressedClosePicture;
-            }
-            return null;
-        }
+            // if true then you can replace the image
 
-        static IEnumerator NullGameInstance()
-        {
-            isCoroutineRunning = true;
-            yield return new WaitForEndOfFrame();
-            gi = null;
-            isCoroutineRunning = false;
+            // not 100% sure this will work, if not you might need to use reflection or something to change some things on this object
+            ___galleryPicture.SetSprite(sprite);
         }
     }
 }
