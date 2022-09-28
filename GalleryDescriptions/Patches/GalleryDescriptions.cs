@@ -11,7 +11,6 @@ namespace GalleryDescriptions.Patches
     [HarmonyPatch(typeof(GalleryScreen), OnPressedGallerySlot)]
 static class GalleryScreen_OnPressedGallerySlot
 {
-    // needs to be named Postfix to tell Harmony to run it after the base game's method
     static void Postfix(GallerySlot gallerySlot, SetSlotPortrait ___galleryPicture)
     {
         if (___galleryslot == -1) return;
