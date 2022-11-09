@@ -16,19 +16,9 @@ static class GalleryScreen_OnPressedGallerySlot
         if (___galleryslot == -1) return;
 
             if (!isCoroutineRunning)
-            {
-                gi = Resources.FindObjectsOfTypeAll<GameInstance>().FirstOrDefault(x => x.AgentCount > 0);
-                SharedCoroutineStarter.StartCoroutine(NullGameInstance());
-            }
+            
 
-            if (gi.GetAgentFromgalleryslot(___galleryslot, out var agent))
-            {
-                if (!agent) return;
-        // need some method to look up an id string and return a sprite
-        // you also need some kind of manager to handle loading the new gallery images from disk or from embedded resources
-        // see: https://github.com/DeadlyKitten/CustomStockIcons/blob/master/CustomStockIcons/Managers/IconManager.cs
-        // to generate a Sprite from a texture you can use the following code, where `texture` is the texture you want to convert
-        
+          
         if (galleryManager.TryGetGallerySprite(gallerySlot.galleryPictureData.ID, out Sprite sprite))
         {
              Plugin.LogDebug($"Replacing gallery images for {agent.GameUniqueIdentifier}");
