@@ -256,7 +256,7 @@
     <EmbeddedResource Include="Resources\rival_gallery_altpose.png" />
     <EmbeddedResource Include="Resources\rival_picture_unlock.png" />
     <EmbeddedResource Include="Resources\rival_picture_unlock_thumb.png" />
-    <EmbeddedResource Include="Resources\snake_dump_large.png.png" />
+    <EmbeddedResource Include="Resources\snake_dump_large.png" />
     <EmbeddedResource Include="Resources\snake_gallery.png" />
     <EmbeddedResource Include="Resources\snake_picture_unlock.png" />
     <EmbeddedResource Include="Resources\squirrel_gallery.png" />
