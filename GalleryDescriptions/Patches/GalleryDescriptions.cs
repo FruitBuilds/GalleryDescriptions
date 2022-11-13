@@ -1,29 +1,27 @@
-﻿using GalleryDescriptions.Utilities;
+using GalleryDescriptions.Managers;
 using HarmonyLib;
 using Nick;
-using System.Collections;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
+using System.Linq;
+using System.Reflection;
 
 namespace GalleryDescriptions.Patches
 {
-    [HarmonyPatch(typeof(GalleryScreen), OnPressedGallerySlot)]
-static class GalleryScreen_OnPressedGallerySlot
-{
-    static void Postfix(GallerySlot gallerySlot, SetSlotPortrait ___galleryPicture)
+    [HarmonyPatch(typeof(GalleryScreen), nameof(GalleryScreen.OnPressedGallerySlot))]
+    static class GalleryScreen_OnPressedGallerySlot
     {
-        if (___galleryslot == -1) return;
+        static BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.Instance;
+        static FieldInfo seekTex = typeof(SetSlotPortrait).GetField("seekTex", bindingFlags);
 
-            if (!isCoroutineRunning)
-            
-
-          
-        if (galleryManager.TryGetGallerySprite(gallerySlot.galleryPictureData.ID, out Sprite sprite))
+        static void Postfix(GallerySlot gallerySlot, SetSlotPortrait ___galleryPicture)
         {
-             Plugin.LogDebug($"Replacing gallery images for {agent.GameUniqueIdentifier}");
-                    
-            ___galleryPicture.SetSprite(sprite);
+            var id = gallerySlot.galleryPictureData.PicturePath.Split('/').Last();
+            if (GalleryManager.TryGetGalleryImage(id, out Texture2D texture))
+            {
+                ___galleryPicture.rawImage.texture = texture;
+                seekTex.SetValue(___galleryPicture, false);
+                ___galleryPicture.rawImage.enabled = true;
+            }
         }
     }
 }
