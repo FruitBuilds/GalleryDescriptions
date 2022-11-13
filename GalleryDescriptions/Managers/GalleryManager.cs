@@ -29,14 +29,28 @@ namespace GalleryDescriptions.Managers
             foreach (var file in Directory.GetFiles(folder).Where(x => allowedFileTypes.Contains(Path.GetExtension(x).ToLower())))
             {
                 var texture = LoadImageFromFile(file);
-                var id = TranslateImageNameToId(Path.GetFileNameWithoutExtension(file));
-                if (GalleryDict.TryGetValue(id.ToLower(), out _))
+                var id = Path.GetFileNameWithoutExtension(file);
+                if (GalleryDict.ContainsKey(id.ToLower()))
                 {
-                    var character = Constants.nameToId.FirstOrDefault(x => x.Value == id.ToLower()).Key;
-                    Plugin.LogWarning($"Multiple gallery images found for {Image ?? id.ToLower()}! Ignoring {Path.GetFileName(file)}");
+                    Plugin.LogWarning($"Multiple gallery images found for {id.ToLower()}! Ignoring {Path.GetFileName(file)}");
                     continue;
                 }
-                GalleryDict.Add(sprite.ToLower(), texture);
+                 GalleryDict.Add(id.ToLower(), texture);
+            }
+
+            foreach (var resource in Assembly.GetExecutingAssembly().GetManifestResourceNames())
+            {
+                var texture = LoadImageFromEmbeddedResource(resource);
+                var array = resource.Split('.');
+                var id = array[array.Length - 2];
+
+                if (GalleryDict.ContainsKey(id.ToLower()))
+                {
+                    Plugin.LogWarning($"Multiple gallery images found for {id.ToLower()}! Ignoring {Path.GetFileName(resource)}");
+                    continue;
+                }
+
+                GalleryDict.Add(id.ToLower(), texture);
             }
 
             stopwatch.Stop();
@@ -44,16 +58,8 @@ namespace GalleryDescriptions.Managers
 
             
         }
-
-        internal static bool TryGetTextureFromGallerySprite(string id, out Texture2D texture) => GalleryDict.TryGetValue(id, out texture);
-
-        internal static string TranslateTextureNameToId(string name)
-        {
-            if (Constants.nameToId.TryGetValue(name.ToLower(), out var id))
-                return id;
-            return name;
-        }
-
+        internal static bool TryGetGalleryImage(string id, out Texture2D texture) => GalleryDict.TryGetValue(id, out texture);
+        
         static Texture2D LoadImageFromFile(string path)
         {
             var bytes = File.ReadAllBytes(path);
