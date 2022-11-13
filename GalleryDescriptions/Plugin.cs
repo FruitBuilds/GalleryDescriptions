@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using BepInEx.Logging;
 using GalleryDescriptions.Managers;
 using HarmonyLib;
@@ -10,7 +10,6 @@ namespace GalleryDescriptions
     public class Plugin : BaseUnityPlugin
     {
         internal static Plugin Instance;
-        internal static ConfigEntry<bool> 
 
         void Awake()
         {
@@ -21,7 +20,7 @@ namespace GalleryDescriptions
             }
             Instance = this;
 
-           
+            GalleryManager.Init();
 
             var harmony = new Harmony(PluginInfo.PLUGIN_GUID);
             harmony.PatchAll();
