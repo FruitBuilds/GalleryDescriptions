@@ -8,15 +8,15 @@ using System.Reflection;
 namespace GalleryDescriptions.Patches
 {
     [HarmonyPatch(typeof(GalleryScreen), nameof(GalleryScreen.SetSlotPortrait))]
-    static class GalleryScreen_Thumbnail
+    static class GalleryScreen_SetSlotPortrait
     {
         static BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.Instance;
         static FieldInfo seekTex = typeof(SetSlotPortrait).GetField("seekTex", bindingFlags);
 
-        static void Postfix(GallerySlot gallerySlot, SetSlotPortrait ___galleryPicture)
+        static void Postfix(GallerySlot gallerySlot, SetSlotPortrait ___thumbnail)
         {
             var id = gallerySlot.galleryPictureData.PicturePath.Split('/').Last();
-            if (GalleryManager.TryGetThumbnail(id, out Texture2D texture))
+            if (GalleryManager.TryGetGalleryImage(id, out Texture2D texture))
             {
                 ___thumbnail.rawImage.texture = texture;
                 seekTex.SetValue(___galleryPicture, false);
