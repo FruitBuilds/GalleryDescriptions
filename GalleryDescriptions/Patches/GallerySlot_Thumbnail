@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace GalleryDescriptions.Patches
 {
-    [HarmonyPatch(typeof(GalleryScreen), nameof(GalleryScreen.SetupThumbnailImage))]
+    [HarmonyPatch(typeof(GallerySlot), nameof(GallerySlot.Thumbnail))]
     static class GalleryScreen_Thumbnail
     {
         static BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.Instance;
