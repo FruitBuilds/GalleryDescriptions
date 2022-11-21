@@ -7,8 +7,8 @@ using System.Reflection;
 
 namespace GalleryDescriptions.Patches
 {
-    [HarmonyPatch(typeof(GallerySlot), nameof(GallerySlot.Thumbnail))]
-    static class GalleryScreen_Thumbnail
+    [HarmonyPatch(typeof(GallerySlot), nameof(GallerySlot.SetSlotPortrait))]
+    static class GalleryScreen_SetSlotPortrait
     {
         static BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.Instance;
         static FieldInfo seekTex = typeof(SetSlotPortrait).GetField("seekTex", bindingFlags);
