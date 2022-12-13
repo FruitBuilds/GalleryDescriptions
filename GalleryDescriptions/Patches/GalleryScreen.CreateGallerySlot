@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace GalleryDescriptions.Patches
 {
-    [HarmonyPatch(typeof(GallerySlot), nameof(GallerySlot.Thumbnail))]
+    [HarmonyPatch(typeof(GallerySlot), nameof(GallerySlot.Initialize))]
     static class GalleryScreen.CreateGallerySlot
     {
         static BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.Instance;
@@ -15,7 +15,7 @@ namespace GalleryDescriptions.Patches
 
         static void Postfix(GallerySlot.Initialize, SetupThumbnailImage___thumbnail)
         {
-            var id = gallerySlot.ThumbnailData.PicturePath.Split('/').Last();
+            var id = gallerySlot.Initialize.PicturePath.Split('/').Last();
             if (GalleryManager.SetupThumbnailImage(id, out Texture2D texture))
             {
                 ___thumbnail.rawImage.texture = texture;
