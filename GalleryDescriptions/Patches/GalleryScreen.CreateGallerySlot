@@ -18,9 +18,9 @@ namespace GalleryDescriptions.Patches
             var id = gallerySlot.Initialize.PicturePath.Split('/').Last();
             if (GalleryManager.SetupThumbnailImage(id, out Texture2D texture))
             {
-                ___thumbnail.rawImage.texture = texture;
+                ___galleryPicture.rawImage.texture = texture;
                 seekTex.SetValue(___galleryPicture, false);
-                ___thumbnail.rawImage.enabled = true;
+                ___galleryPicture.rawImage.enabled = true;
             }
         }
     }
